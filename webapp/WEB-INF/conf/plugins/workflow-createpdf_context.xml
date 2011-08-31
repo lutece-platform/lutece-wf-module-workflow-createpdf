@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+<beans>
+	<bean id="workflow-createpdf.taskCreatePdf" class="fr.paris.lutece.plugins.workflow.business.task.TaskType" >
+		<property name="key" value="taskCreatePdf" />
+		<property name="titleI18nKey" value="module.workflow.createpdf.task_create_pdf_title" />
+		<property name="className" value="fr.paris.lutece.plugins.workflow.modules.createpdf.business.TaskCreatePDF"/>
+	</bean>
+	
+	<bean id="workflow-createpdf.hashService" class="fr.paris.lutece.util.signrequest.security.Sha1HashService" />
+	<bean id="workflow-createpdf.requestAuthenticatorForWS" class="fr.paris.lutece.util.signrequest.HeaderHashAuthenticator" >
+        <property name="hashService" ref="workflow-createpdf.hashService" />
+        <property name="signatureElements" > 
+            <list>
+            	<value>id_directory_record</value>
+            </list>
+        </property>
+        <property name="privateKey">
+            <value>change me</value>
+        </property>
+    </bean>
+    <bean id="workflow-createpdf.requestAuthenticatorForUrl" class="fr.paris.lutece.util.signrequest.RequestHashAuthenticator" >
+        <property name="hashService" ref="workflow-createpdf.hashService" />
+        <property name="signatureElements" > 
+            <list>
+            	<value>id_directory_record</value>
+            </list>
+        </property>
+        <property name="privateKey">
+            <value>change me</value>
+        </property>
+    </bean>
+    
+    <bean id="workflow-createpdf.taskCreatePDFConfigDAO" class="fr.paris.lutece.plugins.workflow.modules.createpdf.business.TaskCreatePDFConfigDAO" />
+    
+
+</beans>
+ 	
