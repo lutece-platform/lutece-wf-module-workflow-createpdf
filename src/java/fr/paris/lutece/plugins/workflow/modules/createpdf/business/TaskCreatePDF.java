@@ -331,12 +331,27 @@ public class TaskCreatePDF extends Task
 
             for ( IEntry entry : listEntries )
             {
-                ReferenceItem referenceItem = new ReferenceItem(  );
-                referenceItem.setCode( String.valueOf( entry.getIdEntry(  ) ) );
-                referenceItem.setName( entry.getTitle(  ) );
-                referenceList.add( referenceItem );
+            	if ( entry.getEntryType(  ).getGroup(  ) )
+            	{
+            		if ( entry.getChildren(  ) != null )
+            		{
+	            		for ( IEntry child : entry.getChildren(  ) )
+	            		{
+	            			ReferenceItem referenceItem = new ReferenceItem(  );
+	                        referenceItem.setCode( String.valueOf( child.getIdEntry(  ) ) );
+	                        referenceItem.setName( child.getTitle(  ) );
+	                        referenceList.add( referenceItem );
+	            		}
+            		}
+            	}
+            	else
+            	{
+            		ReferenceItem referenceItem = new ReferenceItem(  );
+                    referenceItem.setCode( String.valueOf( entry.getIdEntry(  ) ) );
+                    referenceItem.setName( entry.getTitle(  ) );
+                    referenceList.add( referenceItem );
+            	}                
             }
-
             return referenceList;
         }
         else
