@@ -82,18 +82,21 @@ public class TaskCreatePDFConfigDAO implements ITaskCreatePDFConfigDAO
         daoUtil.setInt( 1, nIdTask );
         daoUtil.executeQuery(  );
 
-        while ( daoUtil.next(  ) )
+        if ( daoUtil.next(  ) )
         {
             TaskCreatePDFConfig taskCreatePDFConfig = new TaskCreatePDFConfig(  );
             taskCreatePDFConfig.setIdTask( daoUtil.getInt( 1 ) );
             taskCreatePDFConfig.setIdDirectory( daoUtil.getInt( 2 ) );
             taskCreatePDFConfig.setIdEntryUrlPDF( daoUtil.getInt( 3 ) );
             taskCreatePDFConfig.setIdConfig( daoUtil.getInt( 4 ) );
-
+            daoUtil.free(  );
             return taskCreatePDFConfig;
         }
-
-        return null;
+        else
+        {
+        	daoUtil.free(  );	
+        	return null;
+        }
     }
 
     /**
