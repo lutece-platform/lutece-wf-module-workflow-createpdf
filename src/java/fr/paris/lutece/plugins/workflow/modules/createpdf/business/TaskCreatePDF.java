@@ -264,7 +264,7 @@ public class TaskCreatePDF extends Task
         String strIdRecord = String.valueOf( record.getIdRecord(  ) );
 
         TaskCreatePDFConfig taskCreatePDFConfig = TaskCreatePDFConfigHome.loadTaskCreatePDFConfig( plugin,
-                resourceHistory.getWorkflow(  ).getId(  ) );
+                getId(  ) );
         String strIdEntryUrlPDF = String.valueOf( taskCreatePDFConfig.getIdEntryUrlPDF(  ) );
 
         List<String> listElements = new ArrayList<String>(  );
