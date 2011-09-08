@@ -33,11 +33,6 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.createpdf.utils;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.directory.modules.pdfproducer.service.ConfigProducerService;
 import fr.paris.lutece.plugins.directory.modules.pdfproducer.service.DirectoryPDFProducerPlugin;
 import fr.paris.lutece.plugins.directory.modules.pdfproducer.utils.PDFUtils;
@@ -49,6 +44,11 @@ import fr.paris.lutece.plugins.workflow.modules.createpdf.service.RequestAuthent
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
+
+import org.apache.commons.lang.StringUtils;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 
 /**
@@ -67,7 +67,7 @@ public class DoDownloadPDF
         TaskCreatePDFConfig taskCreatePDFConfig = TaskCreatePDFConfigHome.loadTaskCreatePDFConfig( PluginService.getPlugin( 
                     CreatePDFPlugin.PLUGIN_NAME ),
                 DirectoryUtils.convertStringToInt( request.getParameter( CreatePDFConstants.PARAMETER_ID_TASK ) ) );
-        String strIdConfig = String.valueOf( taskCreatePDFConfig.getIdConfig(  ) );
+        String strIdConfig = Integer.toString( taskCreatePDFConfig.getIdConfig(  ) );
 
         if ( RequestAuthenticatorService.getRequestAuthenticatorForUrl(  ).isRequestAuthenticated( request ) &&
                 StringUtils.isNotBlank( strIdConfig ) )
@@ -76,8 +76,9 @@ public class DoDownloadPDF
                     "directory-pdfproducer.manageConfigProducer" );
             Plugin plugin = PluginService.getPlugin( DirectoryPDFProducerPlugin.PLUGIN_NAME );
             PDFUtils.doDownloadPDF( request, response, plugin,
+                manageConfigProducerService.loadConfig( plugin, DirectoryUtils.convertStringToInt( strIdConfig ) ),
                 manageConfigProducerService.loadListConfigEntry( plugin,
-                    DirectoryUtils.convertStringToInt( strIdConfig ) ) );
+                    DirectoryUtils.convertStringToInt( strIdConfig ) ), request.getLocale(  ) );
         }
     }
 }

@@ -10,21 +10,21 @@
 <h2> #i18n{module.workflow.createpdf.task_create_pdf_config.title} </h2>
 
 <p>
-   	<label for="id_directory">Votre directory * :</label>
+   	<label for="id_directory">#i18n{module.workflow.createpdf.task_create_pdf_config.label.directory} * :</label>
 	<@combo name="id_directory" items=list_directory default_value=id_directory />
 	<input type="submit" value="Appliquer" name="apply" class="button">
 </p>
 
 <#if list_entries_url?exists && list_entries_url?has_content >
 	<p id="entry_url">
-	    <label for="position_entry_directory_url">url * :</label>
+	    <label for="position_entry_directory_url">#i18n{module.workflow.createpdf.task_create_pdf_config.label.id_entry_url} * :</label>
 		<@combo name="id_entry_url_pdf" items=list_entries_url default_value=position_entry_directory_url />&nbsp;
 		<br/>
 	 </p>
 </#if>
 <#if list_config_pdf?exists && list_config_pdf?has_content>
 	<p id="config_pdf">
-	    <label for="config">config * :</label>
+	    <label for="config">#i18n{module.workflow.createpdf.task_create_pdf_config.label.id_pdf_config} * :</label>
 		<@combo name="id_config_pdf" items=list_config_pdf default_value=config_pdf />&nbsp;
 		<br/>
 	 </p>
