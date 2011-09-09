@@ -67,6 +67,7 @@ import fr.paris.lutece.portal.service.admin.AdminUserService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
+import fr.paris.lutece.portal.service.util.AppPathService;
 import fr.paris.lutece.portal.service.util.AppPropertiesService;
 import fr.paris.lutece.util.ReferenceItem;
 import fr.paris.lutece.util.ReferenceList;
@@ -88,7 +89,7 @@ public class TaskCreatePDF extends Task
     private static final String PARAMETER_ID_ENTRY_URL_PDF = "id_entry_url_pdf";
     private static final String MARKER_TASK_CREATEPDF_CONFIG = "task_config";
     private static final String TEMPLATE_TASK_CREATE_PDF = "admin/plugins/workflow/modules/createpdf/task_create_pdf_config.html";
-
+    
     /**
      * {@inheritDoc}
      */
@@ -263,8 +264,7 @@ public class TaskCreatePDF extends Task
 
         String strIdRecord = String.valueOf( record.getIdRecord(  ) );
 
-        TaskCreatePDFConfig taskCreatePDFConfig = TaskCreatePDFConfigHome.loadTaskCreatePDFConfig( plugin,
-                getId(  ) );
+        TaskCreatePDFConfig taskCreatePDFConfig = TaskCreatePDFConfigHome.loadTaskCreatePDFConfig( plugin, getId(  ) );
         String strIdEntryUrlPDF = String.valueOf( taskCreatePDFConfig.getIdEntryUrlPDF(  ) );
 
         List<String> listElements = new ArrayList<String>(  );
@@ -274,9 +274,13 @@ public class TaskCreatePDF extends Task
 
         String strSignature = RequestAuthenticatorService.getRequestAuthenticatorForUrl(  )
                                                          .buildSignature( listElements, strTime );
-
-        UrlItem url = new UrlItem( AppPropertiesService.getProperty( 
-                    CreatePDFConstants.PROPERTY_WEBAPP_WORKFLOW_CREATEPDF_URL ) + CreatePDFConstants.URL_DOWNLOAD_PDF );
+        
+        StringBuilder sbUrl = new StringBuilder( getBaseUrl( request ) );
+        if ( !sbUrl.toString(  ).endsWith( CreatePDFConstants.SLASH ) )
+        {
+            sbUrl.append( CreatePDFConstants.SLASH );
+        }
+        UrlItem url = new UrlItem( sbUrl.toString(  ) + CreatePDFConstants.URL_DOWNLOAD_PDF );
         url.addParameter( PARAM_SIGNATURE, strSignature );
         url.addParameter( PARAM_TIMESTAMP, strTime );
         url.addParameter( CreatePDFConstants.PARAMETER_ID_DIRECTORY_RECORD, strIdRecord );
@@ -315,7 +319,7 @@ public class TaskCreatePDF extends Task
     }
 
     /**
-     * Method to get directory entries list 
+     * Method to get directory entries list
      * @param nIdDirectory id directory
      * @param request request
      * @return ReferenceList entries list
@@ -331,27 +335,28 @@ public class TaskCreatePDF extends Task
 
             for ( IEntry entry : listEntries )
             {
-            	if ( entry.getEntryType(  ).getGroup(  ) )
-            	{
-            		if ( entry.getChildren(  ) != null )
-            		{
-	            		for ( IEntry child : entry.getChildren(  ) )
-	            		{
-	            			ReferenceItem referenceItem = new ReferenceItem(  );
-	                        referenceItem.setCode( String.valueOf( child.getIdEntry(  ) ) );
-	                        referenceItem.setName( child.getTitle(  ) );
-	                        referenceList.add( referenceItem );
-	            		}
-            		}
-            	}
-            	else
-            	{
-            		ReferenceItem referenceItem = new ReferenceItem(  );
+                if ( entry.getEntryType(  ).getGroup(  ) )
+                {
+                    if ( entry.getChildren(  ) != null )
+                    {
+                        for ( IEntry child : entry.getChildren(  ) )
+                        {
+                            ReferenceItem referenceItem = new ReferenceItem(  );
+                            referenceItem.setCode( String.valueOf( child.getIdEntry(  ) ) );
+                            referenceItem.setName( child.getTitle(  ) );
+                            referenceList.add( referenceItem );
+                        }
+                    }
+                }
+                else
+                {
+                    ReferenceItem referenceItem = new ReferenceItem(  );
                     referenceItem.setCode( String.valueOf( entry.getIdEntry(  ) ) );
                     referenceItem.setName( entry.getTitle(  ) );
                     referenceList.add( referenceItem );
-            	}                
+                }
             }
+
             return referenceList;
         }
         else
@@ -382,5 +387,30 @@ public class TaskCreatePDF extends Task
         }
 
         return referenceList;
+    }
+    
+    /**
+     * Get the base url
+     * @param request the HTTP request
+     * @return the base url
+     */
+    private String getBaseUrl( HttpServletRequest request )
+    {
+        String strBaseUrl = StringUtils.EMPTY;
+
+        if ( request != null )
+        {
+            strBaseUrl = AppPathService.getBaseUrl( request );
+        }
+        else
+        {
+            strBaseUrl = AppPropertiesService.getProperty( CreatePDFConstants.PROPERTY_LUTECE_BASE_URL );
+
+            if ( StringUtils.isBlank( strBaseUrl ) )
+            {
+                strBaseUrl = AppPropertiesService.getProperty( CreatePDFConstants.PROPERTY_LUTECE_PROD_URL );
+            }
+        }
+        return strBaseUrl;
     }
 }
