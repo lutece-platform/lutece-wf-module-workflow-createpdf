@@ -90,12 +90,14 @@ public class TaskCreatePDFConfigDAO implements ITaskCreatePDFConfigDAO
             taskCreatePDFConfig.setIdEntryUrlPDF( daoUtil.getInt( 3 ) );
             taskCreatePDFConfig.setIdConfig( daoUtil.getInt( 4 ) );
             daoUtil.free(  );
+
             return taskCreatePDFConfig;
         }
         else
         {
-        	daoUtil.free(  );	
-        	return null;
+            daoUtil.free(  );
+
+            return null;
         }
     }
 

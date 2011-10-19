@@ -50,10 +50,10 @@ public final class TaskCreatePDFConfigHome
     /**
      * Constructor
      */
-    private TaskCreatePDFConfigHome()
-    {    	
+    private TaskCreatePDFConfigHome(  )
+    {
     }
-    
+
     /**
      * Method to load a TaskCreatePDFConfig by id
      * @param plugin plugin

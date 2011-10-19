@@ -33,6 +33,7 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.createpdf.business;
 
+
 /**
  * TaskCreatePDFConfig
  *

@@ -52,7 +52,6 @@ public final class CreatePDFConstants
     public static final String MARK_LIST_ENTRIES_URL = "list_entries_url";
     public static final String MARK_LIST_CONFIG_PDF = "list_config_pdf";
     public static final String TYPE_CONFIG_PDF = "PDF";
-    
     public static final String PROPERTY_LUTECE_BASE_URL = "lutece.base.url";
     public static final String PROPERTY_LUTECE_PROD_URL = "lutece.prod.url";
     public static final String SLASH = "/";

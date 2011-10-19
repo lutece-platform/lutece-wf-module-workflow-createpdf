@@ -33,18 +33,8 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.createpdf.business;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
-import org.apache.commons.lang.StringUtils;
-
 import fr.paris.lutece.plugins.directory.business.DirectoryHome;
+import fr.paris.lutece.plugins.directory.business.EntryHome;
 import fr.paris.lutece.plugins.directory.business.IEntry;
 import fr.paris.lutece.plugins.directory.business.Record;
 import fr.paris.lutece.plugins.directory.business.RecordField;
@@ -74,6 +64,17 @@ import fr.paris.lutece.util.ReferenceList;
 import fr.paris.lutece.util.html.HtmlTemplate;
 import fr.paris.lutece.util.url.UrlItem;
 
+import org.apache.commons.lang.StringUtils;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
 
 /**
  * TaskCreatePDF
@@ -89,7 +90,7 @@ public class TaskCreatePDF extends Task
     private static final String PARAMETER_ID_ENTRY_URL_PDF = "id_entry_url_pdf";
     private static final String MARKER_TASK_CREATEPDF_CONFIG = "task_config";
     private static final String TEMPLATE_TASK_CREATE_PDF = "admin/plugins/workflow/modules/createpdf/task_create_pdf_config.html";
-    
+
     /**
      * {@inheritDoc}
      */
@@ -257,45 +258,52 @@ public class TaskCreatePDF extends Task
     */
     public void processTask( int nIdResourceHistory, HttpServletRequest request, Plugin plugin, Locale locale )
     {
+        Plugin pluginDirectory = PluginService.getPlugin( DirectoryPlugin.PLUGIN_NAME );
         ResourceHistory resourceHistory = ResourceHistoryHome.findByPrimaryKey( nIdResourceHistory,
                 PluginService.getPlugin( WorkflowPlugin.PLUGIN_NAME ) );
-        Plugin pluginDirectory = PluginService.getPlugin( DirectoryPlugin.PLUGIN_NAME );
-        Record record = RecordHome.findByPrimaryKey( resourceHistory.getIdResource(  ), pluginDirectory );
-
-        String strIdRecord = String.valueOf( record.getIdRecord(  ) );
-
         TaskCreatePDFConfig taskCreatePDFConfig = TaskCreatePDFConfigHome.loadTaskCreatePDFConfig( plugin, getId(  ) );
         String strIdEntryUrlPDF = String.valueOf( taskCreatePDFConfig.getIdEntryUrlPDF(  ) );
 
-        List<String> listElements = new ArrayList<String>(  );
-        listElements.add( strIdRecord );
+        IEntry entry = EntryHome.findByPrimaryKey( DirectoryUtils.convertStringToInt( strIdEntryUrlPDF ),
+                pluginDirectory );
+        Record record = RecordHome.findByPrimaryKey( resourceHistory.getIdResource(  ), pluginDirectory );
 
-        String strTime = Long.toString( new Date(  ).getTime(  ) );
-
-        String strSignature = RequestAuthenticatorService.getRequestAuthenticatorForUrl(  )
-                                                         .buildSignature( listElements, strTime );
-        
-        StringBuilder sbUrl = new StringBuilder( getBaseUrl( request ) );
-        if ( !sbUrl.toString(  ).endsWith( CreatePDFConstants.SLASH ) )
+        if ( ( entry != null ) && ( record != null ) )
         {
-            sbUrl.append( CreatePDFConstants.SLASH );
-        }
-        UrlItem url = new UrlItem( sbUrl.toString(  ) + CreatePDFConstants.URL_DOWNLOAD_PDF );
-        url.addParameter( PARAM_SIGNATURE, strSignature );
-        url.addParameter( PARAM_TIMESTAMP, strTime );
-        url.addParameter( CreatePDFConstants.PARAMETER_ID_DIRECTORY_RECORD, strIdRecord );
-        url.addParameter( CreatePDFConstants.PARAMETER_ID_TASK, taskCreatePDFConfig.getIdTask(  ) );
+            List<String> listElements = new ArrayList<String>(  );
+            listElements.add( Integer.toString( record.getIdRecord(  ) ) );
 
-        RecordFieldFilter filter = new RecordFieldFilter(  );
-        filter.setIdRecord( DirectoryUtils.convertStringToInt( strIdRecord ) );
-        filter.setIdEntry( DirectoryUtils.convertStringToInt( strIdEntryUrlPDF ) );
+            String strTime = Long.toString( new Date(  ).getTime(  ) );
 
-        List<RecordField> listRecordField = RecordFieldHome.getRecordFieldList( filter, pluginDirectory );
+            String strSignature = RequestAuthenticatorService.getRequestAuthenticatorForUrl(  )
+                                                             .buildSignature( listElements, strTime );
 
-        for ( RecordField recordField : listRecordField )
-        {
+            StringBuilder sbUrl = new StringBuilder( getBaseUrl( request ) );
+
+            if ( !sbUrl.toString(  ).endsWith( CreatePDFConstants.SLASH ) )
+            {
+                sbUrl.append( CreatePDFConstants.SLASH );
+            }
+
+            UrlItem url = new UrlItem( sbUrl.toString(  ) + CreatePDFConstants.URL_DOWNLOAD_PDF );
+            url.addParameter( PARAM_SIGNATURE, strSignature );
+            url.addParameter( PARAM_TIMESTAMP, strTime );
+            url.addParameter( CreatePDFConstants.PARAMETER_ID_DIRECTORY_RECORD, record.getIdRecord(  ) );
+            url.addParameter( CreatePDFConstants.PARAMETER_ID_TASK, taskCreatePDFConfig.getIdTask(  ) );
+
+            RecordFieldFilter filter = new RecordFieldFilter(  );
+            filter.setIdRecord( record.getIdRecord(  ) );
+            filter.setIdEntry( DirectoryUtils.convertStringToInt( strIdEntryUrlPDF ) );
+
+            // Delete record field
+            RecordFieldHome.removeByFilter( filter, pluginDirectory );
+
+            // Insert the new record Field
+            RecordField recordField = new RecordField(  );
+            recordField.setRecord( record );
+            recordField.setEntry( entry );
             recordField.setValue( url.getUrl(  ) );
-            RecordFieldHome.update( recordField, pluginDirectory );
+            RecordFieldHome.create( recordField, pluginDirectory );
         }
     }
 
@@ -388,7 +396,7 @@ public class TaskCreatePDF extends Task
 
         return referenceList;
     }
-    
+
     /**
      * Get the base url
      * @param request the HTTP request
@@ -411,6 +419,7 @@ public class TaskCreatePDF extends Task
                 strBaseUrl = AppPropertiesService.getProperty( CreatePDFConstants.PROPERTY_LUTECE_PROD_URL );
             }
         }
+
         return strBaseUrl;
     }
 }
