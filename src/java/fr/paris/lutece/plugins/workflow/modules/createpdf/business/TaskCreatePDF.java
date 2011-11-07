@@ -343,12 +343,22 @@ public class TaskCreatePDF extends Task
 
             for ( IEntry entry : listEntries )
             {
+                if ( entry.getEntryType(  ).getComment(  ) )
+                {
+                    continue;
+                }
+
                 if ( entry.getEntryType(  ).getGroup(  ) )
                 {
                     if ( entry.getChildren(  ) != null )
                     {
                         for ( IEntry child : entry.getChildren(  ) )
                         {
+                            if ( entry.getEntryType(  ).getComment(  ) )
+                            {
+                                continue;
+                            }
+
                             ReferenceItem referenceItem = new ReferenceItem(  );
                             referenceItem.setCode( String.valueOf( child.getIdEntry(  ) ) );
                             referenceItem.setName( child.getTitle(  ) );
