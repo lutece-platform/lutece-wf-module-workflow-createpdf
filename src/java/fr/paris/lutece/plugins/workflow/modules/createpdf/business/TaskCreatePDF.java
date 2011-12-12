@@ -354,7 +354,7 @@ public class TaskCreatePDF extends Task
                     {
                         for ( IEntry child : entry.getChildren(  ) )
                         {
-                            if ( entry.getEntryType(  ).getComment(  ) )
+                            if ( child.getEntryType(  ).getComment(  ) )
                             {
                                 continue;
                             }
