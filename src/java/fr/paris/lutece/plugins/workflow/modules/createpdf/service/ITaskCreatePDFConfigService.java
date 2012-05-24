@@ -31,67 +31,45 @@
  *
  * License 1.0
  */
-package fr.paris.lutece.plugins.workflow.modules.createpdf.business;
+package fr.paris.lutece.plugins.workflow.modules.createpdf.service;
 
-import fr.paris.lutece.plugins.workflow.modules.createpdf.service.CreatePDFPlugin;
-import fr.paris.lutece.portal.service.plugin.Plugin;
-import fr.paris.lutece.portal.service.spring.SpringContextService;
+import fr.paris.lutece.plugins.workflow.modules.createpdf.business.TaskCreatePDFConfig;
+
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
- * TaskCreatePDFConfigHome
+ *
+ * ITaskCreatePDFConfigService
  *
  */
-public final class TaskCreatePDFConfigHome
+public interface ITaskCreatePDFConfigService
 {
-    private static ITaskCreatePDFConfigDAO _dao = (ITaskCreatePDFConfigDAO) SpringContextService.getPluginBean( CreatePDFPlugin.PLUGIN_NAME,
-            "workflow-createpdf.taskCreatePDFConfigDAO" );
-
     /**
-     * Constructor
-     */
-    private TaskCreatePDFConfigHome(  )
-    {
-    }
-
-    /**
-     * Method to load a TaskCreatePDFConfig by id
-     * @param plugin plugin
-     * @param nIdTask id task
-     * @return TaskCreatePDFConfig taskCreatePDFConfig
-     */
-    public static TaskCreatePDFConfig loadTaskCreatePDFConfig( Plugin plugin, int nIdTask )
-    {
-        return _dao.loadTaskCreatePDFConfig( plugin, nIdTask );
-    }
+    * Method to load a TaskCreatePDFConfig by id
+    * @param nIdTask id task
+    * @return TaskCreatePDFConfig taskCreatePDFConfig
+    */
+    TaskCreatePDFConfig loadTaskCreatePDFConfig( int nIdTask );
 
     /**
      * Method to create a new TaskCreatePDFConfig
-     * @param plugin plugin
      * @param taskCreatePDFConfig taskCreatePDFConfig
      */
-    public static void createTaskCreatePDFConfig( Plugin plugin, TaskCreatePDFConfig taskCreatePDFConfig )
-    {
-        _dao.createTaskCreatePDFConfig( plugin, taskCreatePDFConfig );
-    }
+    @Transactional( "workflow-createpdf.transactionManager" )
+    void createTaskCreatePDFConfig( TaskCreatePDFConfig taskCreatePDFConfig );
 
     /**
      * Method to delete a TaskCreatePDFConfig by id
-     * @param plugin plugin
      * @param nIdTask id task
      */
-    public static void deleteTaskCreatePDFConfig( Plugin plugin, int nIdTask )
-    {
-        _dao.deleteTaskCreatePDFConfig( plugin, nIdTask );
-    }
+    @Transactional( "workflow-createpdf.transactionManager" )
+    void deleteTaskCreatePDFConfig( int nIdTask );
 
     /**
      * Method to update a TaskCreatePDFConfig
-     * @param plugin plugin
      * @param taskCreatePDFConfig taskCreatePDFConfig
      */
-    public static void updateTaskCreatePDFConfig( Plugin plugin, TaskCreatePDFConfig taskCreatePDFConfig )
-    {
-        _dao.updateTaskCreatePDFConfig( plugin, taskCreatePDFConfig );
-    }
+    @Transactional( "workflow-createpdf.transactionManager" )
+    void updateTaskCreatePDFConfig( TaskCreatePDFConfig taskCreatePDFConfig );
 }

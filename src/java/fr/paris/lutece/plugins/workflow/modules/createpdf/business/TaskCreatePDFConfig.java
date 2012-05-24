@@ -54,7 +54,7 @@ public class TaskCreatePDFConfig
     }
 
     /**
-     * @param idTask the IdTask to set
+     * @param nIdTask the IdTask to set
      */
     public void setIdTask( int nIdTask )
     {
@@ -70,7 +70,7 @@ public class TaskCreatePDFConfig
     }
 
     /**
-     * @param idDirectory the IdDirectory to set
+     * @param nIdDirectory the IdDirectory to set
      */
     public void setIdDirectory( int nIdDirectory )
     {

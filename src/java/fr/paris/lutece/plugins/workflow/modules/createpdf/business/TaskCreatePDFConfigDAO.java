@@ -38,6 +38,7 @@ import fr.paris.lutece.util.sql.DAOUtil;
 
 
 /**
+ *
  * TaskCreatePDFConfigDAO
  *
  */
@@ -49,8 +50,9 @@ public class TaskCreatePDFConfigDAO implements ITaskCreatePDFConfigDAO
     private static final String SQL_QUERY_UPDATE = "UPDATE task_create_pdf_cf SET id_entry_url_pdf = ? , id_directory = ? , id_config = ? WHERE id_task = ? ;";
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
+    @Override
     public void createTaskCreatePDFConfig( Plugin plugin, TaskCreatePDFConfig taskCreatePDFConfig )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
@@ -63,8 +65,9 @@ public class TaskCreatePDFConfigDAO implements ITaskCreatePDFConfigDAO
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
+    @Override
     public void deleteTaskCreatePDFConfig( Plugin plugin, int nIdTask )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
@@ -74,8 +77,9 @@ public class TaskCreatePDFConfigDAO implements ITaskCreatePDFConfigDAO
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
+    @Override
     public TaskCreatePDFConfig loadTaskCreatePDFConfig( Plugin plugin, int nIdTask )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
@@ -102,8 +106,9 @@ public class TaskCreatePDFConfigDAO implements ITaskCreatePDFConfigDAO
     }
 
     /**
-    * {@inheritDoc}
-    */
+     * {@inheritDoc}
+     */
+    @Override
     public void updateTaskCreatePDFConfig( Plugin plugin, TaskCreatePDFConfig taskCreatePDFConfig )
     {
         DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
