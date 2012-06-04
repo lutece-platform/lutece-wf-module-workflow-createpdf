@@ -41,11 +41,13 @@ import fr.paris.lutece.plugins.directory.modules.pdfproducer.service.DirectoryPD
 import fr.paris.lutece.plugins.directory.service.DirectoryPlugin;
 import fr.paris.lutece.plugins.directory.utils.DirectoryUtils;
 import fr.paris.lutece.plugins.workflow.modules.createpdf.business.TaskCreatePDFConfig;
-import fr.paris.lutece.plugins.workflow.modules.createpdf.service.ITaskCreatePDFConfigService;
 import fr.paris.lutece.plugins.workflow.modules.createpdf.utils.CreatePDFConstants;
+import fr.paris.lutece.plugins.workflow.utils.WorkflowUtils;
+import fr.paris.lutece.plugins.workflow.web.task.NoFormTaskComponent;
+import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 import fr.paris.lutece.plugins.workflowcore.service.task.ITask;
-import fr.paris.lutece.plugins.workflowcore.web.task.NoFormTaskComponent;
 import fr.paris.lutece.portal.service.admin.AdminUserService;
+import fr.paris.lutece.portal.service.i18n.I18nService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.template.AppTemplateService;
@@ -61,6 +63,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -72,48 +75,19 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class CreatePDFTaskComponent extends NoFormTaskComponent
 {
-    // PARAMETERS
-    private static final String PARAMETER_ID_CONFIG_PDF = "id_config_pdf";
-    private static final String PARAMETER_ID_ENTRY_URL_PDF = "id_entry_url_pdf";
-
     // MARKS
     private static final String MARKER_TASK_CREATEPDF_CONFIG = "task_config";
 
     // TEMPLATES
     private static final String TEMPLATE_TASK_CREATE_PDF = "admin/plugins/workflow/modules/createpdf/task_create_pdf_config.html";
 
+    // PROPERTIES
+    private static final String PROPERTY_LABEL_DEFAULT = "module.workflow.createpdf.task_create_pdf_config.label.default";
+
     // SERVICES
     @Inject
-    private ITaskCreatePDFConfigService _taskCreatePDFConfigService;
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String doSaveConfig( HttpServletRequest request, Locale locale, ITask task )
-    {
-        String strIdTask = request.getParameter( CreatePDFConstants.PARAMETER_ID_TASK );
-        String strIdPDFConfig = request.getParameter( PARAMETER_ID_CONFIG_PDF );
-        String strIdEntryUrlPDF = request.getParameter( PARAMETER_ID_ENTRY_URL_PDF );
-        String strIdDirectory = request.getParameter( CreatePDFConstants.PARAMETER_ID_DIRECTORY );
-
-        TaskCreatePDFConfig taskCreatePDFConfig = new TaskCreatePDFConfig(  );
-        taskCreatePDFConfig.setIdTask( DirectoryUtils.convertStringToInt( strIdTask ) );
-        taskCreatePDFConfig.setIdDirectory( DirectoryUtils.convertStringToInt( strIdDirectory ) );
-        taskCreatePDFConfig.setIdConfig( DirectoryUtils.convertStringToInt( strIdPDFConfig ) );
-        taskCreatePDFConfig.setIdEntryUrlPDF( ( DirectoryUtils.convertStringToInt( strIdEntryUrlPDF ) ) );
-
-        if ( _taskCreatePDFConfigService.loadTaskCreatePDFConfig( DirectoryUtils.convertStringToInt( strIdTask ) ) != null )
-        {
-            _taskCreatePDFConfigService.updateTaskCreatePDFConfig( taskCreatePDFConfig );
-        }
-        else
-        {
-            _taskCreatePDFConfigService.createTaskCreatePDFConfig( taskCreatePDFConfig );
-        }
-
-        return null;
-    }
+    @Named( CreatePDFConstants.BEAN_CREATE_PDF_CONFIG_SERVICE )
+    private ITaskConfigService _taskCreatePDFConfigService;
 
     /**
      * {@inheritDoc}
@@ -138,7 +112,7 @@ public class CreatePDFTaskComponent extends NoFormTaskComponent
 
         if ( StringUtils.isNotBlank( strIdTask ) )
         {
-            TaskCreatePDFConfig taskCreatePDFConfig = _taskCreatePDFConfigService.loadTaskCreatePDFConfig( DirectoryUtils.convertStringToInt( 
+            TaskCreatePDFConfig taskCreatePDFConfig = _taskCreatePDFConfigService.findByPrimaryKey( DirectoryUtils.convertStringToInt( 
                         strIdTask ) );
 
             if ( taskCreatePDFConfig != null )
@@ -150,7 +124,7 @@ public class CreatePDFTaskComponent extends NoFormTaskComponent
 
         model.put( CreatePDFConstants.MARK_DIRECTORY_LIST, getListDirectories(  ) );
         model.put( CreatePDFConstants.MARK_LIST_ENTRIES_URL, getListEntriesUrl( nIdDirectory, request ) );
-        model.put( CreatePDFConstants.MARK_LIST_CONFIG_PDF, getListConfigPdf( nIdDirectory ) );
+        model.put( CreatePDFConstants.MARK_LIST_CONFIG_PDF, getListConfigPdf( nIdDirectory, locale ) );
 
         HtmlTemplate template = AppTemplateService.getTemplate( TEMPLATE_TASK_CREATE_PDF, locale, model );
 
@@ -254,15 +228,18 @@ public class CreatePDFTaskComponent extends NoFormTaskComponent
     /**
      * Method to get list of config, by id directory
      * @param nIdDirectory id directory
+     * @param locale the locale
      * @return ReferenceList list of config
      */
-    private static ReferenceList getListConfigPdf( int nIdDirectory )
+    private static ReferenceList getListConfigPdf( int nIdDirectory, Locale locale )
     {
         Plugin pluginDirectoryPDFProducer = PluginService.getPlugin( DirectoryPDFProducerPlugin.PLUGIN_NAME );
         List<ConfigProducer> listConfigProducer = ConfigProducerHome.loadListProducerConfig( pluginDirectoryPDFProducer,
                 nIdDirectory, CreatePDFConstants.TYPE_CONFIG_PDF );
 
         ReferenceList referenceList = new ReferenceList(  );
+        referenceList.addItem( WorkflowUtils.CONSTANT_ID_NULL,
+            I18nService.getLocalizedString( PROPERTY_LABEL_DEFAULT, locale ) );
 
         for ( ConfigProducer configProducer : listConfigProducer )
         {

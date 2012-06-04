@@ -45,6 +45,7 @@ import fr.paris.lutece.plugins.directory.utils.DirectoryUtils;
 import fr.paris.lutece.plugins.workflow.modules.createpdf.business.TaskCreatePDFConfig;
 import fr.paris.lutece.plugins.workflow.modules.createpdf.utils.CreatePDFConstants;
 import fr.paris.lutece.plugins.workflowcore.business.resource.ResourceHistory;
+import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 import fr.paris.lutece.plugins.workflowcore.service.resource.IResourceHistoryService;
 import fr.paris.lutece.plugins.workflowcore.service.task.SimpleTask;
 import fr.paris.lutece.portal.service.plugin.Plugin;
@@ -61,6 +62,7 @@ import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -81,7 +83,8 @@ public class TaskCreatePDF extends SimpleTask
 
     // SERVICES
     @Inject
-    private ITaskCreatePDFConfigService _taskCreatePDFConfigService;
+    @Named( CreatePDFConstants.BEAN_CREATE_PDF_CONFIG_SERVICE )
+    private ITaskConfigService _taskCreatePDFConfigService;
     @Inject
     private IResourceHistoryService _resourceHistoryService;
 
@@ -102,7 +105,7 @@ public class TaskCreatePDF extends SimpleTask
     {
         Plugin pluginDirectory = PluginService.getPlugin( DirectoryPlugin.PLUGIN_NAME );
         ResourceHistory resourceHistory = _resourceHistoryService.findByPrimaryKey( nIdResourceHistory );
-        TaskCreatePDFConfig taskCreatePDFConfig = _taskCreatePDFConfigService.loadTaskCreatePDFConfig( getId(  ) );
+        TaskCreatePDFConfig taskCreatePDFConfig = _taskCreatePDFConfigService.findByPrimaryKey( getId(  ) );
         String strIdEntryUrlPDF = String.valueOf( taskCreatePDFConfig.getIdEntryUrlPDF(  ) );
 
         IEntry entry = EntryHome.findByPrimaryKey( DirectoryUtils.convertStringToInt( strIdEntryUrlPDF ),

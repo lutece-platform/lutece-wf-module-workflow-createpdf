@@ -40,6 +40,9 @@ package fr.paris.lutece.plugins.workflow.modules.createpdf.utils;
  */
 public final class CreatePDFConstants
 {
+    // BEANS
+    public static final String BEAN_CREATE_PDF_CONFIG_SERVICE = "workflow-createpdf.taskCreatePDFConfigService";
+
     // PARAMETERS
     public static final String PARAMETER_ID_DIRECTORY = "id_directory";
     public static final String PARAMETER_ID_DIRECTORY_RECORD = "id_directory_record";

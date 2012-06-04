@@ -33,7 +33,8 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.createpdf.business;
 
-import fr.paris.lutece.portal.service.plugin.Plugin;
+import fr.paris.lutece.plugins.workflow.modules.createpdf.service.CreatePDFPlugin;
+import fr.paris.lutece.plugins.workflowcore.business.config.ITaskConfigDAO;
 import fr.paris.lutece.util.sql.DAOUtil;
 
 
@@ -42,7 +43,7 @@ import fr.paris.lutece.util.sql.DAOUtil;
  * TaskCreatePDFConfigDAO
  *
  */
-public class TaskCreatePDFConfigDAO implements ITaskCreatePDFConfigDAO
+public class TaskCreatePDFConfigDAO implements ITaskConfigDAO<TaskCreatePDFConfig>
 {
     private static final String SQL_QUERY_SELECT = "SELECT id_task, id_directory, id_entry_url_pdf, id_config FROM task_create_pdf_cf WHERE id_task = ? ;";
     private static final String SQL_QUERY_INSERT = "INSERT INTO task_create_pdf_cf ( id_task, id_directory, id_entry_url_pdf, id_config ) VALUES ( ? , ? , ? , ? );";
@@ -53,9 +54,9 @@ public class TaskCreatePDFConfigDAO implements ITaskCreatePDFConfigDAO
      * {@inheritDoc}
      */
     @Override
-    public void createTaskCreatePDFConfig( Plugin plugin, TaskCreatePDFConfig taskCreatePDFConfig )
+    public void insert( TaskCreatePDFConfig taskCreatePDFConfig )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_INSERT, CreatePDFPlugin.getPlugin(  ) );
         daoUtil.setInt( 1, taskCreatePDFConfig.getIdTask(  ) );
         daoUtil.setInt( 2, taskCreatePDFConfig.getIdDirectory(  ) );
         daoUtil.setInt( 3, taskCreatePDFConfig.getIdEntryUrlPDF(  ) );
@@ -68,9 +69,9 @@ public class TaskCreatePDFConfigDAO implements ITaskCreatePDFConfigDAO
      * {@inheritDoc}
      */
     @Override
-    public void deleteTaskCreatePDFConfig( Plugin plugin, int nIdTask )
+    public void delete( int nIdTask )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_DELETE, CreatePDFPlugin.getPlugin(  ) );
         daoUtil.setInt( 1, nIdTask );
         daoUtil.executeQuery(  );
         daoUtil.free(  );
@@ -80,9 +81,9 @@ public class TaskCreatePDFConfigDAO implements ITaskCreatePDFConfigDAO
      * {@inheritDoc}
      */
     @Override
-    public TaskCreatePDFConfig loadTaskCreatePDFConfig( Plugin plugin, int nIdTask )
+    public TaskCreatePDFConfig load( int nIdTask )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_SELECT, CreatePDFPlugin.getPlugin(  ) );
         daoUtil.setInt( 1, nIdTask );
         daoUtil.executeQuery(  );
 
@@ -109,9 +110,9 @@ public class TaskCreatePDFConfigDAO implements ITaskCreatePDFConfigDAO
      * {@inheritDoc}
      */
     @Override
-    public void updateTaskCreatePDFConfig( Plugin plugin, TaskCreatePDFConfig taskCreatePDFConfig )
+    public void store( TaskCreatePDFConfig taskCreatePDFConfig )
     {
-        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, plugin );
+        DAOUtil daoUtil = new DAOUtil( SQL_QUERY_UPDATE, CreatePDFPlugin.getPlugin(  ) );
         daoUtil.setInt( 1, taskCreatePDFConfig.getIdEntryUrlPDF(  ) );
         daoUtil.setInt( 2, taskCreatePDFConfig.getIdDirectory(  ) );
         daoUtil.setInt( 3, taskCreatePDFConfig.getIdConfig(  ) );

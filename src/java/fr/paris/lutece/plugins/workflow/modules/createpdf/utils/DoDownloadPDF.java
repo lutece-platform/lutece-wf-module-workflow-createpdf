@@ -40,9 +40,8 @@ import fr.paris.lutece.plugins.directory.modules.pdfproducer.service.DirectoryPD
 import fr.paris.lutece.plugins.directory.modules.pdfproducer.utils.PDFUtils;
 import fr.paris.lutece.plugins.directory.utils.DirectoryUtils;
 import fr.paris.lutece.plugins.workflow.modules.createpdf.business.TaskCreatePDFConfig;
-import fr.paris.lutece.plugins.workflow.modules.createpdf.service.ITaskCreatePDFConfigService;
 import fr.paris.lutece.plugins.workflow.modules.createpdf.service.RequestAuthenticatorService;
-import fr.paris.lutece.plugins.workflow.modules.createpdf.service.TaskCreatePDFConfigService;
+import fr.paris.lutece.plugins.workflowcore.service.config.ITaskConfigService;
 import fr.paris.lutece.portal.service.plugin.Plugin;
 import fr.paris.lutece.portal.service.plugin.PluginService;
 import fr.paris.lutece.portal.service.spring.SpringContextService;
@@ -72,8 +71,8 @@ public class DoDownloadPDF
      */
     public void doDownloadFile( HttpServletRequest request, HttpServletResponse response )
     {
-        ITaskCreatePDFConfigService taskCreatePDFConfigService = SpringContextService.getBean( TaskCreatePDFConfigService.BEAN_SERVICE );
-        TaskCreatePDFConfig taskCreatePDFConfig = taskCreatePDFConfigService.loadTaskCreatePDFConfig( DirectoryUtils.convertStringToInt( 
+        ITaskConfigService taskCreatePDFConfigService = SpringContextService.getBean( CreatePDFConstants.BEAN_CREATE_PDF_CONFIG_SERVICE );
+        TaskCreatePDFConfig taskCreatePDFConfig = taskCreatePDFConfigService.findByPrimaryKey( DirectoryUtils.convertStringToInt( 
                     request.getParameter( CreatePDFConstants.PARAMETER_ID_TASK ) ) );
         String strIdConfig = Integer.toString( taskCreatePDFConfig.getIdConfig(  ) );
 

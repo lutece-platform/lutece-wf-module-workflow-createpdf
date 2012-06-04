@@ -33,33 +33,25 @@
  */
 package fr.paris.lutece.plugins.workflow.modules.createpdf.business;
 
+import fr.paris.lutece.plugins.workflowcore.business.config.TaskConfig;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
 
 /**
  * TaskCreatePDFConfig
  *
  */
-public class TaskCreatePDFConfig
+public class TaskCreatePDFConfig extends TaskConfig
 {
-    private int _nIdTask;
+    @NotNull
+    @Min( 1 )
     private int _nIdDirectory;
     private int _nIdConfig;
+    @NotNull
+    @Min( 1 )
     private int _nIdEntryUrlPDF;
-
-    /**
-     * @return the IdTask
-     */
-    public int getIdTask(  )
-    {
-        return _nIdTask;
-    }
-
-    /**
-     * @param nIdTask the IdTask to set
-     */
-    public void setIdTask( int nIdTask )
-    {
-        _nIdTask = nIdTask;
-    }
 
     /**
      * @return the IdDirectory
