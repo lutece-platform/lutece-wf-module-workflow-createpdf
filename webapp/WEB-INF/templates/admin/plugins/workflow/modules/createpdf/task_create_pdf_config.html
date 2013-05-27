@@ -7,25 +7,19 @@
 	<#assign idConfig = task_config.idConfig>
 </#if>
 
-<h2> #i18n{module.workflow.createpdf.task_create_pdf_config.title} </h2>
-
-<p>
-   	<label for="idDirectory">#i18n{module.workflow.createpdf.task_create_pdf_config.label.directory} * :</label>
-	<@combo name="idDirectory" items=list_directory default_value=idDirectory />
-	<input type="submit" value="Appliquer" name="apply" class="button">
-</p>
-
+<p class="lead">#i18n{module.workflow.createpdf.task_create_pdf_config.title} </p>
+<label for="idDirectory">#i18n{module.workflow.createpdf.task_create_pdf_config.label.directory} * :</label>
+<@combo name="idDirectory" items=list_directory default_value=idDirectory />
+<div class="form-actions">
+	<button type="submit"  name="apply" class="btn btn-primary btn-small">
+		<i class="icon-ok-circle icon-white"></i>&nbsp;Appliquer
+	</button>
+</div>
 <#if list_entries_url?exists && list_entries_url?has_content >
-	<p id="idEntryUrlPDF">
-	    <label for="idEntryUrlPDF">#i18n{module.workflow.createpdf.task_create_pdf_config.label.id_entry_url} * :</label>
-		<@combo name="idEntryUrlPDF" items=list_entries_url default_value=idEntryUrlPDF />&nbsp;
-		<br/>
-	 </p>
+	<label for="idEntryUrlPDF">#i18n{module.workflow.createpdf.task_create_pdf_config.label.id_entry_url} *</label>
+	<@combo name="idEntryUrlPDF" items=list_entries_url default_value=idEntryUrlPDF />&nbsp;
 </#if>
 <#if list_config_pdf?exists && list_config_pdf?has_content>
-	<p id="idConfig">
-	    <label for="idConfig">#i18n{module.workflow.createpdf.task_create_pdf_config.label.id_pdf_config} * :</label>
-		<@combo name="idConfig" items=list_config_pdf default_value=idConfig />&nbsp;
-		<br/>
-	 </p>
+    <label for="idConfig">#i18n{module.workflow.createpdf.task_create_pdf_config.label.id_pdf_config} *</label>
+	<@combo name="idConfig" items=list_config_pdf default_value=idConfig />&nbsp;
 </#if>
