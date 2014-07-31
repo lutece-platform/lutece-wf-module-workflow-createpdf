@@ -75,6 +75,9 @@ public class DoDownloadPDF
         TaskCreatePDFConfig taskCreatePDFConfig = taskCreatePDFConfigService.findByPrimaryKey( DirectoryUtils.convertStringToInt( 
                     request.getParameter( CreatePDFConstants.PARAMETER_ID_TASK ) ) );
         String strIdConfig = Integer.toString( taskCreatePDFConfig.getIdConfig(  ) );
+        int nIdRecord=DirectoryUtils.convertStringToInt( 
+                request.getParameter( CreatePDFConstants.PARAMETER_ID_DIRECTORY_RECORD) ) ;
+        
 
         if ( RequestAuthenticatorService.getRequestAuthenticatorForUrl(  ).isRequestAuthenticated( request ) &&
                 StringUtils.isNotBlank( strIdConfig ) )
@@ -121,7 +124,7 @@ public class DoDownloadPDF
 
                 PDFUtils.doDownloadPDF( request, response, plugin, config,
                     manageConfigProducerService.loadListConfigEntry( plugin,
-                        DirectoryUtils.convertStringToInt( strIdConfig ) ), request.getLocale(  ) );
+                        DirectoryUtils.convertStringToInt( strIdConfig ) ), request.getLocale(  ) ,nIdRecord);
             }
         }
     }
