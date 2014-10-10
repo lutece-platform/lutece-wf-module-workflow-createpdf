@@ -7,27 +7,27 @@
 	<#assign idConfig = task_config.idConfig>
 </#if>
 <p class="lead">#i18n{module.workflow.createpdf.task_create_pdf_config.title}</p>
-<div class="control-group">
-	<label class="control-label" for="idDirectory">#i18n{module.workflow.createpdf.task_create_pdf_config.label.directory} *</label>
-	<div class="controls">
+<div class="form-group">
+	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="idDirectory">#i18n{module.workflow.createpdf.task_create_pdf_config.label.directory} *</label>
+	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 		<@comboWithParams name="idDirectory" default_value=idDirectory?string additionalParameters="class=\"input-xxlarge\"" items=list_directory />
-		<button type="submit" value="apply" name="apply" class="btn btn-primary btn-small">
-			<i class="icon-ok-circle icon-white"></i>&nbsp;Appliquer
+		<button type="submit" value="apply" name="apply" class="btn btn-primary btn-sm btn-flat">
+			<i class="glyphicon glyphicon-ok-circle"></i>&nbsp;Appliquer
 		</button>
 	</div>
 </div>
 <#if list_entries_url?exists && list_entries_url?has_content >
-<div class="control-group">
-	<label class="control-label"  for="idEntryUrlPDF">#i18n{module.workflow.createpdf.task_create_pdf_config.label.id_entry_url} *</label>
-	<div class="controls">
+<div class="form-group">
+	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3"  for="idEntryUrlPDF">#i18n{module.workflow.createpdf.task_create_pdf_config.label.id_entry_url} *</label>
+	<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 		<@comboWithParams name="idEntryUrlPDF" default_value=idEntryUrlPDF?string additionalParameters="class=\"input-xxlarge\"" items=list_entries_url />
 	</div>
 </div>
 </#if>
 <#if list_config_pdf?exists && list_config_pdf?has_content>
-<div class="control-group">
-	<label class="control-label" for="idConfig">#i18n{module.workflow.createpdf.task_create_pdf_config.label.id_pdf_config} *</label>
-		<div class="controls">
+<div class="form-group">
+	<label class="control-label col-xs-12 col-sm-12 col-md-3 col-lg-3" for="idConfig">#i18n{module.workflow.createpdf.task_create_pdf_config.label.id_pdf_config} *</label>
+		<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
 		<@combo name="idConfig" items=list_config_pdf default_value=idConfig />&nbsp;
 		</div>
 </div>
