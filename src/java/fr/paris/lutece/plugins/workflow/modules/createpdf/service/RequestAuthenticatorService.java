@@ -34,7 +34,7 @@
 package fr.paris.lutece.plugins.workflow.modules.createpdf.service;
 
 import fr.paris.lutece.portal.service.spring.SpringContextService;
-import fr.paris.lutece.util.signrequest.AbstractAuthenticator;
+import fr.paris.lutece.util.signrequest.AbstractPrivateKeyAuthenticator;
 import fr.paris.lutece.util.signrequest.RequestAuthenticator;
 
 
@@ -63,10 +63,10 @@ public final class RequestAuthenticatorService
     }
 
     /**
-     * @return AbstractAuthenticator
+     * @return AbstractPrivateKeyAuthenticator
      */
-    public static AbstractAuthenticator getRequestAuthenticatorForUrl(  )
+    public static AbstractPrivateKeyAuthenticator getRequestAuthenticatorForUrl(  )
     {
-        return (AbstractAuthenticator) SpringContextService.getBean( BEAN_REQUESTAUTHENTICATOR_FOR_URL );
+        return (AbstractPrivateKeyAuthenticator) SpringContextService.getBean( BEAN_REQUESTAUTHENTICATOR_FOR_URL );
     }
 }
